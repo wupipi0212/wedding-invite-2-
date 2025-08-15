@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>電子喜帖</title>
+<style>
+  body {
+    text-align: center;
+    background-color: #fce8e8;
+    margin: 0;
+    padding: 0;
+  }
+  img {
+    max-width: 90%;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.6s;
+  }
+  .flip {
+    transform: rotateY(180deg);
+  }
+</style>
+</head>
+<body>
+
+<img id="invite" src="1.png" alt="喜帖">
+
+<script>
+  const img = document.getElementById('invite');
+  let showingCover = true;
+
+  img.addEventListener('click', () => {
+    img.classList.add('flip');
+    setTimeout(() => {
+      img.src = showingCover ? '2.png' : '1.png';
+      showingCover = !showingCover;
+      img.classList.remove('flip');
+    }, 300);
+  });
+</script>
+
+</body>
+</html>
