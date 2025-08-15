@@ -17,9 +17,6 @@
   .flip-card {
     perspective: 1000px;
     cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     transition: width 0.8s, height 0.8s; /* 平滑縮放 */
   }
 
@@ -51,25 +48,13 @@
   }
 
   .flip-card-front img, .flip-card-back img {
-    max-width: 100%;
-    max-height: 100%;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
-    position: absolute;
-    top: 0;
-    left: 0;
-    transition: opacity 0.3s;
   }
 
   .flip-card-back {
     transform: rotateY(180deg);
-  }
-
-  .hidden {
-    opacity: 0;
-  }
-
-  .visible {
-    opacity: 1;
   }
 
 </style>
@@ -79,11 +64,55 @@
 <div class="flip-card" id="card" style="width:300px; height:420px;">
   <div class="flip-card-inner" id="cardInner">
     <div class="flip-card-front">
-      <img src="1.png" class="visible" alt="婚禮正面">
-      <img src="2.png" class="hidden" alt="婚禮背面">
-      <img src="新莊店卡.jpg" class="hidden" alt="第三張">
+      <img src="1.png" alt="正面">
     </div>
     <div class="flip-card-back">
-      <img src="1.png" class="visible" alt="婚禮正面">
-      <img src="2.png" class="hidden" alt="婚禮背面">
-      <img src="新莊店卡.jpg" class="hidden" alt="第三
+      <img src="2.png" alt="背面">
+    </div>
+  </div>
+</div>
+
+<script>
+const images = [
+  {src:"1.png", width:300, height:420},
+  {src:"2.png", width:300, height:420},
+  {src:"新莊店卡.jpg", width:500, height:364}
+];
+
+let currentIndex = 0;
+const card = document.getElementById("card");
+const cardInner = document.getElementById("cardInner");
+const frontImg = cardInner.querySelector(".flip-card-front img");
+const backImg = cardInner.querySelector(".flip-card-back img");
+
+card.addEventListener("click", () => {
+  // 計算下一張
+  const nextIndex = (currentIndex + 1) % images.length;
+
+  // 平滑縮放卡片尺寸
+  card.style.width = images[nextIndex].width + "px";
+  card.style.height = images[nextIndex].height + "px";
+
+  // 先翻轉
+  cardInner.classList.toggle("flipped");
+
+  // 翻轉動畫結束後更新下一張圖片
+  setTimeout(() => {
+    if (cardInner.classList.contains("flipped")) {
+      backImg.src = images[nextIndex].src;
+    } else {
+      frontImg.src = images[nextIndex].src;
+    }
+    currentIndex = nextIndex;
+  }, 400); // 翻轉到一半更新圖片，更自然
+});
+
+// 預載圖片
+images.forEach(item => {
+  const img = new Image();
+  img.src = item.src;
+});
+</script>
+
+</body>
+</html>
