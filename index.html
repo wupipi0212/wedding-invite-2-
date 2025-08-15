@@ -15,17 +15,12 @@
   }
 
   .flip-card {
-    width: 500px;   /* 固定卡片寬度 */
-    height: 420px;  /* 固定卡片高度 */
     perspective: 1000px;
     cursor: pointer;
-  }
-
-  .flip-card-front img,
-  .flip-card-back img {
-    width: 100%;
-    height: 100%;
-    object-fit: corver;  /* 放大填滿卡片，保持比例，多餘部分裁切 */
+    transition: width 0.5s, height 0.5s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .flip-card-inner {
@@ -40,8 +35,7 @@
     transform: rotateY(180deg);
   }
 
-  .flip-card-front,
-  .flip-card-back {
+  .flip-card-front, .flip-card-back {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -52,11 +46,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-size: contain;       /* 保持比例完整顯示 */
-    background-repeat: no-repeat;   /* 不重複 */
-    background-position: center;    /*置中顯示 */
-    background-color: transparent;        /* 空白部分填滿白色 */
-    /*background: white; */
+    background: white;
+  }
+
+  .flip-card-front img, .flip-card-back img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
   }
 
   .flip-card-back {
@@ -66,46 +62,46 @@
 </head>
 <body>
 
-<div class="flip-card" id="card">
+<div class="flip-card" id="card" style="width:300px; height:420px;">
   <div class="flip-card-inner" id="cardInner">
-    <div class="flip-card-front"></div>
-    <div class="flip-card-back"></div>
+    <div class="flip-card-front">
+      <img src="1.png" alt="婚禮正面">
+    </div>
+    <div class="flip-card-back">
+      <img src="2.png" alt="婚禮背面">
+    </div>
   </div>
 </div>
 
 <script>
   const images = [
-    "1.png",
-    "2.png",
-    "新莊店卡.jpg"
+    { src: "1.png", width: 300, height: 420 },
+    { src: "2.png", width: 300, height: 420 },
+    { src: "新莊店卡.jpg", width: 500, height: 364 } // 約等比例縮放 1501x1093
   ];
 
   let currentIndex = 0;
+  const card = document.getElementById("card");
   const cardInner = document.getElementById("cardInner");
-  const front = cardInner.querySelector(".flip-card-front");
-  const back = cardInner.querySelector(".flip-card-back");
+  const frontImg = cardInner.querySelector(".flip-card-front img");
+  const backImg = cardInner.querySelector(".flip-card-back img");
 
-  // 初始化第一張圖
-  front.style.backgroundImage = `url(${images[0]})`;
-  back.style.backgroundImage = `url(${images[1]})`;
+card.addEventListener("click", () => {
+  // 先準備下一張的尺寸和圖片
+  currentIndex = (currentIndex + 1) % images.length;
+  card.style.width = images[currentIndex].width + "px";
+  card.style.height = images[currentIndex].height + "px";
 
-  document.getElementById("card").addEventListener("click", () => {
-    const nextIndex = (currentIndex + 1) % images.length;
-    const nextImage = images[nextIndex];
+  if (cardInner.classList.contains("flipped")) {
+    frontImg.src = images[currentIndex].src; // 預先更新正面
+  } else {
+    backImg.src = images[currentIndex].src;  // 預先更新背面
+  }
 
+  // 再開始翻轉
+  cardInner.classList.toggle("flipped");
+});
 
-    if (cardInner.classList.contains("flipped")) {
-      front.style.backgroundImage = `url(${nextImage})`;
-    } else {
-      back.style.backgroundImage = `url(${nextImage})`;
-    }
-
-    cardInner.classList.toggle("flipped");
-
-    setTimeout(() => {
-      currentIndex = nextIndex;
-    }, 800);
-  });
 </script>
 
 </body>
