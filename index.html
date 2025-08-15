@@ -21,6 +21,13 @@
     cursor: pointer;
   }
 
+  .flip-card-front img,
+  .flip-card-back img {
+    width: 100%;
+    height: 100%;
+    object-fit: corver;  /* 放大填滿卡片，保持比例，多餘部分裁切 */
+  }
+
   .flip-card-inner {
     position: relative;
     width: 100%;
@@ -48,7 +55,7 @@
     background-size: contain;       /* 保持比例完整顯示 */
     background-repeat: no-repeat;   /* 不重複 */
     background-position: center;    /*置中顯示 */
-    background-color: white;        /* 空白部分填滿白色 */
+    background-color: transparent;        /* 空白部分填滿白色 */
     /*background: white; */
   }
 
