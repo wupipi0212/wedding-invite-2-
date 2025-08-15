@@ -62,7 +62,7 @@
 </head>
 <body>
 
-<div class="flip-card" id="card" style="width:500px; height:700px;">
+<div class="flip-card" id="card" style="width:300px; height:420px;">
   <div class="flip-card-inner" id="cardInner">
     <div class="flip-card-front">
       <img src="1.png" alt="婚禮正面">
@@ -75,9 +75,9 @@
 
 <script>
   const images = [
-    { src: "1.png", width: 500, height: 700 },
-    { src: "2.png", width: 500, height: 700 },
-    { src: "新莊店卡.jpg", width: 800, height: 582 } // 放大比例 1501x1093
+    { src: "1.png", width: 300, height: 420 },
+    { src: "2.png", width: 300, height: 420 },
+    { src: "新莊店卡.jpg", width: 500, height: 364 } // 約等比例縮放 1501x1093
   ];
 
   let currentIndex = 0;
@@ -91,6 +91,7 @@
 
     setTimeout(() => {
       currentIndex = (currentIndex + 1) % images.length;
+      const nextIndex = (currentIndex + 1) % images.length;
 
       // 調整卡片大小
       card.style.width = images[currentIndex].width + "px";
