@@ -1,42 +1,109 @@
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<title>俊佑&思瑩的婚禮邀請</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>俊佑&思瑩的婚禮邀請函</title>
 <style>
   body {
-    text-align: center;
-    background-color: #e8fce8;
-    margin: 0;
-    padding: 0;
+    background: #e8fce8;
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
   }
-  img {
-    max-width: 90%;
-    height: auto;
+
+  .flip-card {
+    perspective: 1000px;
     cursor: pointer;
-    transition: transform 0.6s;
+    transition: width 0.5s, height 0.5s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
-  .flip {
+
+  .flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.8s;
+  }
+
+  .flipped {
+    transform: rotateY(180deg);
+  }
+
+  .flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+  }
+
+  .flip-card-front img, .flip-card-back img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .flip-card-back {
     transform: rotateY(180deg);
   }
 </style>
 </head>
 <body>
 
-<img id="invite" src="1.png" alt="喜帖">
+<div class="flip-card" id="card" style="width:300px; height:420px;">
+  <div class="flip-card-inner" id="cardInner">
+    <div class="flip-card-front">
+      <img src="1.png" alt="婚禮正面">
+    </div>
+    <div class="flip-card-back">
+      <img src="2.png" alt="婚禮背面">
+    </div>
+  </div>
+</div>
 
 <script>
-  const img = document.getElementById('invite');
-  let showingCover = true;
+  const images = [
+    { src: "1.png", width: 300, height: 420 },
+    { src: "2.png", width: 300, height: 420 },
+    { src: "新莊店卡.jpg", width: 500, height: 364 } // 約等比例縮放 1501x1093
+  ];
 
-  img.addEventListener('click', () => {
-    img.classList.add('flip');
+  let currentIndex = 0;
+  const card = document.getElementById("card");
+  const cardInner = document.getElementById("cardInner");
+  const frontImg = cardInner.querySelector(".flip-card-front img");
+  const backImg = cardInner.querySelector(".flip-card-back img");
+
+  card.addEventListener("click", () => {
+    cardInner.classList.toggle("flipped");
+
     setTimeout(() => {
-      img.src = showingCover ? '2.png' : '1.png';
-      showingCover = !showingCover;
-      img.classList.remove('flip');
-    }, 300);
+      currentIndex = (currentIndex + 1) % images.length;
+      const nextIndex = (currentIndex + 1) % images.length;
+
+      // 調整卡片大小
+      card.style.width = images[currentIndex].width + "px";
+      card.style.height = images[currentIndex].height + "px";
+
+      // 換圖片
+      if (cardInner.classList.contains("flipped")) {
+        backImg.src = images[currentIndex].src;
+      } else {
+        frontImg.src = images[currentIndex].src;
+      }
+    }, 400);
   });
 </script>
 
