@@ -17,7 +17,8 @@
   .flip-card {
     perspective: 1000px;
     cursor: pointer;
-    transition: width 0.8s, height 0.8s; /* 平滑縮放 */
+    display: inline-block;
+    transition: width 0.4s, height 0.4s; /* 平滑縮放 */
   }
 
   .flip-card-inner {
@@ -47,10 +48,15 @@
     background: transparent;
   }
 
+  .flip-card-front, .flip-card-back {
+    background: #e8fce8; /* 跟 body 一樣 */
+  }
+
   .flip-card-front img, .flip-card-back img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    /*object-fit: contain;*/
+    object-fit: cover;
   }
 
   .flip-card-back {
@@ -85,6 +91,12 @@ const cardInner = document.getElementById("cardInner");
 const frontImg = cardInner.querySelector(".flip-card-front img");
 const backImg = cardInner.querySelector(".flip-card-back img");
 
+
+images.forEach(item => {
+  const img = new Image();
+  img.src = item.src;
+});
+
 card.addEventListener("click", () => {
   // 計算下一張
   const nextIndex = (currentIndex + 1) % images.length;
@@ -93,25 +105,26 @@ card.addEventListener("click", () => {
   card.style.width = images[nextIndex].width + "px";
   card.style.height = images[nextIndex].height + "px";
 
-  // 先翻轉
-  cardInner.classList.toggle("flipped");
+  if (!cardInner.classList.contains("flipped")) {
+    // 正面在顯示 → 下一張放到背面
+    backImg.src = images[nextIndex].src;
+    cardInner.classList.add("flipped");
+  } else {
+    // 背面在顯示 → 下一張放到正面
+    frontImg.src = images[nextIndex].src;
+    cardInner.classList.remove("flipped");
+  }
 
-  // 翻轉動畫結束後更新下一張圖片
-  setTimeout(() => {
-    if (cardInner.classList.contains("flipped")) {
-      backImg.src = images[nextIndex].src;
-    } else {
-      frontImg.src = images[nextIndex].src;
-    }
-    currentIndex = nextIndex;
-  }, 400); // 翻轉到一半更新圖片，更自然
+  // 更新索引
+  currentIndex = nextIndex;
+	
 });
 
 // 預載圖片
-images.forEach(item => {
+/*images.forEach(item => {
   const img = new Image();
   img.src = item.src;
-});
+});*/
 </script>
 
 </body>
